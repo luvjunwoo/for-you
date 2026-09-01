@@ -1,1 +1,637 @@
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+    background: #fbfbfd;
+
+    color: #1d1d1f;
+}
+
+
+/* =========================
+   전체 화면
+========================= */
+
+.container {
+    width: 100%;
+    height: 100vh;
+}
+
+
+/* =========================
+   각 화면
+========================= */
+
+.screen {
+    display: none;
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 32px 24px;
+
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    overflow: hidden;
+
+    animation:
+        screenIn
+        0.55s
+        cubic-bezier(.16, 1, .3, 1);
+}
+
+
+.screen.active {
+    display: flex;
+}
+
+
+/* 은은한 핑크 배경 */
+
+.screen::before {
+    content: "";
+
+    position: absolute;
+
+    width: 360px;
+    height: 360px;
+
+    border-radius: 50%;
+
+    background: #ffe7ef;
+
+    filter: blur(80px);
+
+    opacity: 0.7;
+
+    z-index: -1;
+
+    animation:
+        float
+        8s
+        ease-in-out
+        infinite;
+}
+
+
+/* =========================
+   텍스트
+========================= */
+
+h1 {
+    margin: 0 0 32px;
+
+    font-size: clamp(27px, 7vw, 36px);
+
+    font-weight: 700;
+
+    letter-spacing: -1.5px;
+
+    line-height: 1.3;
+
+    color: #1d1d1f;
+}
+
+
+.small-text {
+    margin-top: 26px;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    letter-spacing: -0.4px;
+
+    color: #86868b;
+}
+
+
+/* =========================
+   편지 봉투
+========================= */
+
+.envelope-wrapper {
+    cursor: pointer;
+
+    padding: 20px;
+
+    transition:
+        transform
+        0.3s
+        cubic-bezier(.16, 1, .3, 1);
+}
+
+
+.envelope-wrapper:active {
+    transform: scale(0.95);
+}
+
+
+.envelope {
+    position: relative;
+
+    width: 230px;
+    height: 155px;
+
+    filter:
+        drop-shadow(
+            0 18px 25px
+            rgba(255, 100, 145, 0.18)
+        );
+}
+
+
+/* 봉투 몸통 */
+
+.envelope-body {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff8db0,
+            #ff6f9c
+        );
+
+    border-radius: 22px;
+
+    overflow: hidden;
+}
+
+
+/* 봉투 장식 */
+
+.envelope-body::before {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    transform: rotate(45deg);
+
+    left: 25px;
+    bottom: -130px;
+}
+
+
+/* 편지 */
+
+.letter {
+    position: absolute;
+
+    width: 175px;
+    height: 120px;
+
+    left: 50%;
+    top: 20px;
+
+    transform:
+        translateX(-50%);
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    z-index: 2;
+
+    box-shadow:
+        0 8px 20px
+        rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform
+        0.8s
+        cubic-bezier(.16, 1, .3, 1);
+}
+
+
+/* 편지 안의 선 */
+
+.letter::before {
+    content: "";
+
+    position: absolute;
+
+    width: 75px;
+    height: 6px;
+
+    border-radius: 99px;
+
+    background: #f1f1f3;
+
+    left: 50%;
+    top: 35px;
+
+    transform:
+        translateX(-50%);
+}
+
+
+.letter::after {
+    content: "";
+
+    position: absolute;
+
+    width: 110px;
+    height: 6px;
+
+    border-radius: 99px;
+
+    background: #f5f5f7;
+
+    left: 50%;
+    top: 55px;
+
+    transform:
+        translateX(-50%);
+}
+
+
+/* 봉투 덮개 */
+
+.envelope-flap {
+    position: absolute;
+
+    top: 0;
+
+    width: 0;
+    height: 0;
+
+    border-left:
+        115px solid transparent;
+
+    border-right:
+        115px solid transparent;
+
+    border-top:
+        88px solid #ffb1c8;
+
+    transform-origin: top;
+
+    z-index: 4;
+
+    transition:
+        transform
+        0.75s
+        cubic-bezier(.16, 1, .3, 1);
+}
+
+
+/* 봉투 열기 */
+
+.envelope.open .envelope-flap {
+    transform:
+        rotateX(180deg);
+}
+
+
+.envelope.open .letter {
+    transform:
+        translateX(-50%)
+        translateY(-100px);
+}
+
+
+/* =========================
+   하트 버튼
+========================= */
+
+.heart-button {
+    width: 104px;
+    height: 104px;
+
+    border: none;
+
+    border-radius: 34px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff759f,
+            #ff9fbb
+        );
+
+    color: white;
+
+    font-size: 54px;
+
+    line-height: 1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 14px 30px
+        rgba(255, 94, 140, 0.25);
+
+    transition:
+        transform
+        0.25s
+        cubic-bezier(.16, 1, .3, 1),
+
+        box-shadow
+        0.25s
+        ease;
+}
+
+
+.heart-button:active {
+    transform:
+        scale(0.93);
+}
+
+
+/* =========================
+   응 / 아니 버튼
+========================= */
+
+.choice-buttons {
+    display: flex;
+
+    gap: 12px;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+.yes-button,
+.no-button {
+    border: none;
+
+    min-width: 100px;
+
+    padding:
+        15px 24px;
+
+    border-radius: 18px;
+
+    font-family: inherit;
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+    letter-spacing: -0.4px;
+
+    cursor: pointer;
+}
+
+
+/* 응 버튼 */
+
+.yes-button {
+    background: #ff5f8f;
+
+    color: white;
+
+    box-shadow:
+        0 10px 20px
+        rgba(255, 95, 143, 0.22);
+
+    transition:
+        transform
+        0.2s
+        cubic-bezier(.16, 1, .3, 1);
+}
+
+
+.yes-button:active {
+    transform:
+        scale(0.95);
+}
+
+
+/* 아니 버튼 */
+
+.no-button {
+    background: #e9e9ed;
+
+    color: #636366;
+
+    position: relative;
+
+    /*
+    버튼이 순간이동하지 않고
+    자연스럽게 이동하도록 함
+    */
+
+    transition:
+        left
+        0.45s
+        cubic-bezier(.16, 1, .3, 1),
+
+        top
+        0.45s
+        cubic-bezier(.16, 1, .3, 1),
+
+        transform
+        0.35s
+        cubic-bezier(.16, 1, .3, 1);
+
+    will-change:
+        left,
+        top,
+        transform;
+}
+
+
+/* =========================
+   마지막 편지
+========================= */
+
+.final-message {
+    width: 100%;
+
+    max-width: 390px;
+
+    padding:
+        36px 28px;
+
+    border-radius: 32px;
+
+    background:
+        rgba(255, 255, 255, 0.78);
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.9);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.06);
+}
+
+
+.final-message h1 {
+    margin-bottom: 24px;
+
+    font-size: 30px;
+
+    color: #ff5f8f;
+}
+
+
+.final-message p {
+    margin: 0;
+
+    font-size: 17px;
+
+    line-height: 1.7;
+
+    letter-spacing: -0.5px;
+
+    color: #3a3a3c;
+}
+
+
+.big-heart {
+    margin-top: 28px;
+
+    font-size: 52px;
+
+    color: #ff5f8f;
+
+    animation:
+        softBeat
+        1.8s
+        ease-in-out
+        infinite;
+}
+
+
+/* =========================
+   애니메이션
+========================= */
+
+@keyframes screenIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(16px)
+            scale(0.985);
+    }
+
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+@keyframes float {
+
+    0% {
+        transform:
+            translate(-20px, -10px);
+    }
+
+
+    50% {
+        transform:
+            translate(20px, 20px);
+    }
+
+
+    100% {
+        transform:
+            translate(-20px, -10px);
+    }
+
+}
+
+
+@keyframes softBeat {
+
+    0%,
+    100% {
+        transform:
+            scale(1);
+    }
+
+
+    50% {
+        transform:
+            scale(1.1);
+    }
+
+}
+
+
+/* =========================
+   모바일
+========================= */
+
+@media (max-width: 500px) {
+
+    .screen {
+        padding:
+            25px 20px;
+    }
+
+
+    .envelope {
+        transform:
+            scale(0.9);
+    }
+
+
+    .final-message {
+        padding:
+            32px 24px;
+    }
+
+}
